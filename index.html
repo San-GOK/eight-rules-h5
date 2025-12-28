@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>八项规定 星火燎原 清风铸廉</title>
+    <style>
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        /* 全局红色背景：覆盖整个网页，无图片依赖 */
+        body {
+            background: linear-gradient(135deg, #c51e3a 0%, #9c1428 100%);
+            min-height: 100vh;
+        }
+        /* 页面容器：适配手机宽度，禁止横向滚动 */
+        .page-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+        }
+        /* 单页样式：全屏显示，滑动切换+渐入动画 */
+        .page {
+            width: 100%;
+            height: 100vh;
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 0.5s ease, opacity 0.6s ease;
+            opacity: 0; /* 初始透明，切换时显隐 */
+        }
+        /* 初始页面定位+默认显示第1页 */
+        .page1 { left: 0; opacity: 1; }
+        .page2 { left: 100%; }
+        .page3 { left: 200%; }
+        .page4 { left: 300%; }
+        /* 第1页 封面 */
+        .page1-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+        }
+        .star-img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 30px;
+            animation: twinkle 1.5s infinite alternate; /* 星火闪烁特效 */
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cpath d='M40 15L25 35l-15 5l20 20l-5 15l25-15l25 15l-5-15l20-20l-15-5l-15-20z' fill='%23fff'/%3E%3C/svg%3E") no-repeat center;
+        }
+        /* 闪烁动画 */
+        @keyframes twinkle {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0.6; transform: scale(1.1); }
+        }
+        .page1-content h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease forwards 0.3s;
+            opacity: 0;
+        }
+        .tip {
+            font-size: 14px;
+            color: #eee;
+            animation: fadeIn 0.8s ease forwards 0.6s;
+            opacity: 0;
+        }
+        /* 第2页 八项规定 */
+        .page2-content {
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            overflow-y: auto;
+        }
+        .page2-content h2 {
+            font-size: 22px;
+            color: #d32f2f;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        .rule-list {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 25px;
+            padding-left: 15px;
+        }
+        /* 列表项依次弹出特效 */
+        .rule-list li {
+            margin-bottom: 8px;
+            animation: popIn 0.3s ease forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .rule-list li:nth-child(1) { animation-delay: 0.2s; }
+        .rule-list li:nth-child(2) { animation-delay: 0.3s; }
+        .rule-list li:nth-child(3) { animation-delay: 0.4s; }
+        .rule-list li:nth-child(4) { animation-delay: 0.5s; }
+        .rule-list li:nth-child(5) { animation-delay: 0.6s; }
+        .rule-list li:nth-child(6) { animation-delay: 0.7s; }
+        .rule-list li:nth-child(7) { animation-delay: 0.8s; }
+        .rule-list li:nth-child(8) { animation-delay: 0.9s; }
+        /* 弹出动画 */
+        @keyframes popIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .detail-btn {
+            display: block;
+            width: 120px;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            background-color: #d32f2f;
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            margin: 0 auto 15px;
+            cursor: pointer;
+            transition: all 0.3s ease; /* 按钮hover动效 */
+        }
+        .detail-btn:hover {
+            background-color: #b71c1c;
+            transform: scale(1.05);
+        }
+        /* 八项规定意义详情：默认隐藏 */
+        .rule-detail {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #555;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .hide {
+            display: none !important; /* 强制隐藏，避免误显示 */
+        }
+        /* 第3页 星火燎原 */
+        .page3-content {
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            overflow-y: auto;
+        }
+        .page3-content h2 {
+            font-size: 22px;
+            color: #1976d2;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        .desc {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 0.8s ease forwards 0.3s;
+            opacity: 0;
+        }
+        .card-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            animation: fadeIn 0.8s ease forwards 0.6s;
+            opacity: 0;
+        }
+        .card {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            background-color: #1976d2;
+            color: #fff;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            transition: transform 0.3s ease; /* 卡片hover缩放 */
+        }
+        .card:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        /* 第4页 承诺表单 */
+        .page4-content {
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            overflow-y: auto;
+        }
+        .page4-content h2 {
+            font-size: 22px;
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        .form-input {
+            width: 100%;
+            height: 40px;
+            padding: 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        .form-input:focus {
+            border-color: #2e7d32;
+            outline: none;
+        }
+        .form-textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            resize: none;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        .form-textarea:focus {
+            border-color: #2e7d32;
+            outline: none;
+        }
+        .submit-btn {
+            width: 100%;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            background-color: #2e7d32;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #1b5e20;
+            transform: translateY(-2px);
+        }
+        .success-tip {
+            margin-top: 15px;
+            text-align: center;
+            color: #2e7d32;
+            font-size: 14px;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        /* 适配375px宽度 */
+        @media screen and (max-width: 375px) {
+            .page {
+                padding: 15px;
+            }
+            .page1-content h1 {
+                font-size: 32px;
+            }
+            .card {
+                width: 90px;
+                height: 90px;
+                line-height: 90px;
+                font-size: 15px;
+            }
+        }
+        /* 通用渐显动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 激活页面样式（滑动后显示） */
+        .page.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面容器 -->
+    <div class="page-container">
+        <!-- 第1页：封面 -->
+        <section class="page page1">
+            <div class="page1-content">
+                <div class="star-img"></div> <!-- 内嵌星火图标，无需外部图片 -->
+                <h1>八项规定</h1>
+                <p class="subtitle">星火燎原 · 清风铸廉</p>
+                <p class="tip">滑动查看更多</p>
+            </div>
+        </section>
+        <!-- 第2页：八项规定内容 -->
+        <section class="page page2">
+            <div class="page2-content">
+                <h2>中央八项规定</h2>
+                <ul class="rule-list">
+                    <li>1. 改进调查研究，到基层调研要轻车简从、减少陪同、简化接待</li>
+                    <li>2. 精简会议活动，切实改进会风；提高会议实效，开短会、讲短话</li>
+                    <li>3. 精简文件简报，切实改进文风，没有实质内容、可发可不发的文件一律不发</li>
+                    <li>4. 规范出访活动，严格控制出访随行人员，严格按照规定乘坐交通工具</li>
+                    <li>5. 改进警卫工作，坚持有利于联系群众的原则，减少交通管制</li>
+                    <li>6. 改进新闻报道，压缩报道的数量、字数、时长</li>
+                    <li>7. 严格文稿发表，除中央统一安排外，个人不公开出版著作、讲话单行本</li>
+                    <li>8. 厉行勤俭节约，严格遵守廉洁从政各项规定，严格执行住房等工作和生活待遇规定</li>
+                </ul>
+                <button class="detail-btn">查看意义</button>
+                <!-- 意义内容默认隐藏，点击后显示 -->
+                <div class="rule-detail hide">
+                    <p><strong>八项规定的核心意义：</strong></p>
+                    <p>1. 改进工作作风，密切联系群众，解决群众反映强烈的突出问题；</p>
+                    <p>2. 弘扬勤俭节约、艰苦奋斗优良传统，坚决遏制铺张浪费现象；</p>
+                    <p>3. 树立良好党风政风，以优良党风带动社风民风持续向好；</p>
+                    <p>4. 强化党员干部纪律意识，筑牢廉洁自律思想防线，推进全面从严治党。</p>
+                </div>
+            </div>
+        </section>
+        <!-- 第3页：星火燎原 -->
+        <section class="page page3">
+            <div class="page3-content">
+                <h2>星火燎原 风清气正</h2>
+                <p class="desc">从中央到基层，从党政机关到各行各业，八项规定精神落地生根，化作浸润人心的清风，凝聚起干事创业的磅礴力量。</p>
+                <div class="card-group">
+                    <div class="card">基层减负</div>
+                    <div class="card">反对浪费</div>
+                    <div class="card">廉洁奉公</div>
+                </div>
+            </div>
+        </section>
+        <!-- 第4页：清风铸廉 承诺表单 -->
+        <section class="page page4">
+            <div class="page4-content">
+                <h2>清风铸廉 我承诺</h2>
+                <form id="commit-form">
+                    <input type="text" placeholder="请输入姓名" class="form-input" required>
+                    <input type="text" placeholder="请输入部门" class="form-input" required>
+                    <textarea placeholder="请输入承诺内容" class="form-textarea" required></textarea>
+                    <button type="submit" class="submit-btn">提交承诺</button>
+                </form>
+                <p class="success-tip hide"></p>
+            </div>
+        </section>
+    </div>
+    <script>
+        // 等待页面DOM加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. 页面滑动切换功能（带渐显渐隐动态效果）
+            const pages = document.querySelectorAll('.page');
+            let currentPageIndex = 0;
+            let startX = 0;
+            const pageContainer = document.querySelector('.page-container');
+
+            // 触摸开始
+            pageContainer.addEventListener('touchstart', function(e) {
+                startX = e.touches[0].clientX;
+            });
+
+            // 触摸结束
+            pageContainer.addEventListener('touchend', function(e) {
+                const endX = e.changedTouches[0].clientX;
+                const diffX = endX - startX;
+
+                // 左滑（下一页）
+                if (diffX < -50 && currentPageIndex < pages.length - 1) {
+                    pages[currentPageIndex].classList.remove('active');
+                    currentPageIndex++;
+                    updatePagePosition();
+                    pages[currentPageIndex].classList.add('active');
+                }
+
+                // 右滑（上一页）
+                if (diffX > 50 && currentPageIndex > 0) {
+                    pages[currentPageIndex].classList.remove('active');
+                    currentPageIndex--;
+                    updatePagePosition();
+                    pages[currentPageIndex].classList.add('active');
+                }
+            });
+
+            // 更新页面位置
+            function updatePagePosition() {
+                pages.forEach((page, index) => {
+                    page.style.transform = `translateX(${(index - currentPageIndex) * 100}%)`;
+                });
+            }
+
+            // 2. “查看意义”按钮：点击展开/收起，未点击完全隐藏
+            const detailBtn = document.querySelector('.detail-btn');
+            const detailContent = document.querySelector('.rule-detail');
+
+            detailBtn.addEventListener('click', function() {
+                if (detailContent.classList.contains('hide')) {
+                    detailContent.classList.remove('hide');
+                    this.textContent = '收起意义'; // 切换按钮文字
+                } else {
+                    detailContent.classList.add('hide');
+                    this.textContent = '查看意义'; // 恢复按钮文字
+                }
+            });
+
+            // 3. 表单提交功能
+            const form = document.getElementById('commit-form');
+            const successTip = document.querySelector('.success-tip');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // 阻止默认提交
+
+                // 简单表单验证
+                const name = document.querySelector('input[placeholder="请输入姓名"]').value.trim();
+                const department = document.querySelector('input[placeholder="请输入部门"]').value.trim();
+                const promise = document.querySelector('textarea[placeholder="请输入承诺内容"]').value.trim();
+
+                if (!name || !department || !promise) {
+                    successTip.textContent = '请填写完整承诺信息！';
+                    successTip.style.color = '#d32f2f';
+                    successTip.classList.remove('hide');
+                    setTimeout(() => {
+                        successTip.classList.add('hide');
+                    }, 2000);
+                    return;
+                }
+
+                // 提交成功提示
+                successTip.textContent = '承诺提交成功！坚守初心，廉洁自律～';
+                successTip.style.color = '#2e7d32';
+                successTip.classList.remove('hide');
+
+                // 3秒后重置表单和提示
+                setTimeout(() => {
+                    form.reset();
+                    successTip.classList.add('hide');
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
